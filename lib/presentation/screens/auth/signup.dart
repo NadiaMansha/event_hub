@@ -35,7 +35,7 @@ class _SignupState extends State<Signup> {
       child: BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state is LoginFailedState) {
-            toastMessage.successToast(state.message);
+            toastMessage.failedToast(state.message);
           }
           if (state is LoginSuccessState) {
             toastMessage.successToast(state.message);
@@ -48,8 +48,6 @@ class _SignupState extends State<Signup> {
         builder: (context, state) {
           if (state is LoginSuccessState) {
             return const Home();
-          } else if (state is LoginFailedState) {
-            return const Login();
           } else {
             return SingleChildScrollView(
               child: Column(

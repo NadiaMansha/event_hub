@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../constants/app_colors.dart';
+import '../../../../data/models/user.dart';
+import '../../../../data/repositories/auth_repository.dart';
 import '../../../../logic/cubits/cubit/event_cubit.dart';
 import 'event_details.dart';
 
@@ -15,6 +17,18 @@ class Events extends StatefulWidget {
 }
 
 class _EventsState extends State<Events> {
+  User? user;
+
+  @override
+  void initState() {
+    AuthRepository().getLogin().then((value) {
+      user = value;
+    }).whenComplete(() {
+      setState(() {});
+    });
+    super.initState();
+  }
+
   final ToastMessage toastMessage = ToastMessage();
   @override
   Widget build(BuildContext context) {
@@ -27,32 +41,11 @@ class _EventsState extends State<Events> {
             ),
           ),
           backgroundColor: AppColors().primary,
-          centerTitle: true,
-          title: const Column(children: [
-            Text('Current Location',
-                style: TextStyle(fontSize: 13, color: Colors.white)),
-            Text('New York, USA',
-                style: TextStyle(fontSize: 16, color: Colors.white)),
-          ]),
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: Image.asset('assets/images/menu.png'),
-                color: Colors.redAccent,
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-              );
-            },
+          title: Text(
+            'Welcome ${user?.name ?? 'name'}',
+            style: const TextStyle(
+                color: Colors.white, fontSize: 25, fontWeight: FontWeight.w400),
           ),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: Image.asset('assets/images/bell.png',
-                  width: 40, height: 80, color: Colors.white),
-            ),
-          ],
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(50),
             child: Container(

@@ -9,6 +9,7 @@ import 'package:flutter_material_pickers/helpers/show_time_picker.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../logic/events/cubit/create_event_cubit.dart';
+import '../../../../utils/toast.dart';
 import '../../../../widgets/custom_date_picker.dart';
 
 class AddEvent extends StatefulWidget {
@@ -24,37 +25,35 @@ class _AddEventState extends State<AddEvent> {
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _capacityController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
-  final TextEditingController _dateController = TextEditingController();
-  final TextEditingController _timeController = TextEditingController();
+
   final ImagePicker _picker = ImagePicker();
   XFile? image;
   DateTime? dateTime;
   String? startTime;
   String? endTime;
   final TextEditingController controllerDate = TextEditingController();
+  final ToastMessage toastMessage = ToastMessage();
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Add Event',
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 25,
+                fontWeight: FontWeight.bold)),
+      ),
       body: BlocConsumer(
           bloc: BlocProvider.of<CreateEventCubit>(context),
           listener: (context, state) {
             if (state is CreateEventSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: Colors.green,
-                ),
-              );
+              toastMessage.successToast('Event Created Successfully');
               Navigator.pop(context);
             } else if (state is CreateEventError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: Colors.red,
-                ),
-              );
+              toastMessage.failedToast(state.message!);
             }
           },
           builder: (context, state) {
@@ -63,28 +62,6 @@ class _AddEventState extends State<AddEvent> {
                 children: [
                   const SizedBox(
                     height: 40,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: const Icon(Icons.arrow_back)),
-                    ],
-                  ),
-                  const Text('Add an Event',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black)),
-                  const SizedBox(
-                    height: 20,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(20.0),

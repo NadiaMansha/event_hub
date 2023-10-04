@@ -150,4 +150,49 @@ class EventRepository {
       throw Exception('Failed to load events');
     }
   }
+
+  //get upcoming events
+  Future<List<Event>> getUpcomingEvents() async {
+    String token = await this.token.getToken();
+    final response = await http.get(Uri.parse('$url/getUpcomingEvents'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token'
+        });
+    if (response.statusCode == 200) {
+      var res = const JsonCodec().decode(response.body);
+      var data = res['data'];
+
+      List<Event> events = [];
+      for (var item in data) {
+        events.add(Event.fromJson(item));
+      }
+      return events;
+    } else {
+      print(response.body);
+      throw Exception('Failed to load events');
+    }
+  }
+
+  //get past events
+  Future<List<Event>> getPastEvents() async {
+    String token = await this.token.getToken();
+    final response = await http.get(Uri.parse('$url/getPastEvents'), headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
+    });
+    if (response.statusCode == 200) {
+      var res = const JsonCodec().decode(response.body);
+      var data = res['data'];
+
+      List<Event> events = [];
+      for (var item in data) {
+        events.add(Event.fromJson(item));
+      }
+      return events;
+    } else {
+      print(response.body);
+      throw Exception('Failed to load events');
+    }
+  }
 }

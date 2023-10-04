@@ -14,9 +14,6 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       final User user =
           await AuthRepository().loginUser(email: email, password: password);
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setStringList(
-          'user', [user.username!, user.email!, user.id!, user.role!]);
 
       emit(const LoginSuccessState('Login Successful'));
     } catch (e) {
@@ -42,9 +39,7 @@ class LoginCubit extends Cubit<LoginState> {
           country: country,
           state: state,
           city: city);
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setStringList(
-          'user', [user.name!, user.email!, user.id!, user.role!]);
+
       emit(const LoginSuccessState('Signup Successful'));
     } catch (e) {
       print(e.toString());

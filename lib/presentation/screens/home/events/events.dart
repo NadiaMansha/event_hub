@@ -1,3 +1,5 @@
+import 'package:event_hub/presentation/screens/home/events/past_events.dart';
+import 'package:event_hub/presentation/screens/home/events/upcoming_events.dart';
 import 'package:flutter/material.dart';
 
 class UserEvents extends StatefulWidget {
@@ -14,7 +16,7 @@ class _UserEventsState extends State<UserEvents> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          bottom: TabBar(
+          bottom: const TabBar(
             tabs: [
               Tab(
                 text: 'Upcomig',
@@ -32,12 +34,8 @@ class _UserEventsState extends State<UserEvents> {
         ),
         body: const TabBarView(
           children: [
-            Center(
-              child: Text('Upcoming Events'),
-            ),
-            Center(
-              child: Text('Past Events'),
-            ),
+            UpcomingEvents(),
+            PastEvents(),
           ],
         ),
       ),

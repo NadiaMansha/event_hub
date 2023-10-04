@@ -1,5 +1,6 @@
 import 'package:event_hub/logic/cubits/cubit/event_cubit.dart';
 import 'package:event_hub/logic/events/cubit/create_event_cubit.dart';
+import 'package:event_hub/logic/events/cubit/user_events_cubit.dart';
 import 'package:event_hub/presentation/screens/home/home.dart';
 import 'package:event_hub/presentation/screens/auth/login.dart';
 import 'package:event_hub/presentation/screens/splash.dart';
@@ -28,7 +29,8 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => LoginCubit()),
         BlocProvider(create: (_) => CreateEventCubit()),
-        BlocProvider(create: (_) => EventCubit())
+        BlocProvider(create: (_) => EventCubit()),
+        BlocProvider(create: (_) => UserEventsCubit()),
       ],
       child: MaterialApp(
           title: 'Event Hub',

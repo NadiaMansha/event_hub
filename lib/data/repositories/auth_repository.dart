@@ -18,8 +18,9 @@ class AuthRepository {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('token', res['token']);
       prefs.setBool('isLoggedin', true);
-      prefs.setString('user', jsonEncode(res['data']));
-      print(res);
+      User user = User.fromJson(res['data']);
+      prefs.setString('user', jsonEncode(user.toJson()));
+
       return User.fromJson(res['data']);
     } else {
       throw Exception('Failed to load user');
@@ -57,6 +58,18 @@ class AuthRepository {
     } else {
       print(response.body);
       throw Exception('Failed to load user');
+    }
+  }
+
+  //get user details
+  Future<User?> getLogin() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    dynamic model = preferences.getString('user');
+    if (model != null) {
+      print(model);
+      return User.fromJson(json.decode(model));
+    } else {
+      return null;
     }
   }
 }

@@ -9,7 +9,7 @@ class BuyTicket extends StatefulWidget {
 }
 
 class _BuyTicketState extends State<BuyTicket> {
-  CardFieldInputDetails? _card;
+  CardFormEditController controller = CardFormEditController();
   var paymentIntent;
   @override
   void initState() {
@@ -19,34 +19,24 @@ class _BuyTicketState extends State<BuyTicket> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+            title:
+                const Text('Payment', style: TextStyle(color: Colors.black))),
         body: Column(children: [
-      const SizedBox(height: 40),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: CardField(
-          onCardChanged: (card) {
-            setState(() {
-              _card = card;
-              print(_card);
-            });
-          },
-        ),
-      ),
-    ]));
+          const SizedBox(height: 40),
+          Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CardFormField(
+                controller: controller,
+              )),
+          ElevatedButton(
+            onPressed: _handlePayPress,
+            child: Text('Pay'),
+          )
+        ]));
   }
 
-  displayPaymentSheet() async {
-    try {
-      await Stripe.instance.presentPaymentSheet().then((value) {
-        //Clear paymentIntent variable after successful payment
-        paymentIntent = null;
-      }).onError((error, stackTrace) {
-        throw Exception(error);
-      });
-    } on StripeException catch (e) {
-      print('Error is:---> $e');
-    } catch (e) {
-      print('$e');
-    }
+  void _handlePayPress() {
+    print(controller.details.cvc);
   }
 }
