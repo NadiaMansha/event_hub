@@ -2,10 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:event_hub/data/models/all_events.dart';
+import 'package:event_hub/data/models/event.dart';
+import 'package:event_hub/presentation/screens/home/events/bookmarks.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/token.dart';
+import '../models/bookmark.dart';
 
 class EventRepository {
   String url = 'http://107.21.221.2:5000/events';
@@ -75,6 +78,76 @@ class EventRepository {
       var res = const JsonCodec().decode(response.body);
       print(res);
       throw Exception('Failed to create event');
+    }
+  }
+
+  //bookmark event
+  Future<Map> bookmarkEvent({required String eventId}) async {
+    String token = await this.token.getToken();
+
+    final response = await http.put(
+      Uri.parse('$url/saveEvent/$eventId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return {
+        'status': true,
+        'message': 'Event bookmarked successfully',
+      };
+    } else {
+      var res = const JsonCodec().decode(response.body);
+      print(res);
+      throw Exception('Failed to bookmark event');
+    }
+  }
+
+  //unbookmark event
+  Future<Map> unbookmarkEvent({required String eventId}) async {
+    String token = await this.token.getToken();
+
+    final response = await http.put(
+      Uri.parse('$url/unsaveEvent/$eventId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return {
+        'status': true,
+        'message': 'Event unbookmarked successfully',
+      };
+    } else {
+      var res = const JsonCodec().decode(response.body);
+      print(res);
+      throw Exception('Failed to unbookmark event');
+    }
+  }
+
+  //get bookmarked events
+  Future<List<Datum>> getBookmarkedEvents() async {
+    String token = await this.token.getToken();
+    final response = await http.get(Uri.parse('$url/getSavedEvents'), headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
+    });
+    if (response.statusCode == 200) {
+      var res = const JsonCodec().decode(response.body);
+      var data = res['data'];
+
+      List<Datum> bookmarks = [];
+      for (var item in data) {
+        bookmarks.add(Datum.fromMap(item));
+      }
+      return bookmarks;
+    } else {
+      print(response.body);
+      throw Exception('Failed to load events');
     }
   }
 }

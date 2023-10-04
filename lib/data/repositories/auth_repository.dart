@@ -18,6 +18,7 @@ class AuthRepository {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('token', res['token']);
       prefs.setBool('isLoggedin', true);
+      prefs.setString('user', jsonEncode(res['data']));
       print(res);
       return User.fromJson(res['data']);
     } else {
@@ -49,8 +50,10 @@ class AuthRepository {
 
       prefs.setString('token', res['token']);
       prefs.setBool('isLoggedin', true);
-      print(res);
-      return User.fromJson(res['data']);
+      var user = User.fromJson(res['data']);
+      prefs.setString('user', jsonEncode(user.toJson()));
+
+      return user;
     } else {
       print(response.body);
       throw Exception('Failed to load user');

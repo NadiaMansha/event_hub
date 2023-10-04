@@ -28,12 +28,8 @@ class Event {
   List<dynamic>? users;
   int? capacity;
   List<dynamic>? ratings;
-  bool? isApproved;
-  bool? isBlocked;
-  bool? isEvent;
 
-  List<dynamic>? tags;
-  String? type;
+  bool? isSaved;
   bool? isJoined;
   String? status;
   int? seatsBooked;
@@ -58,11 +54,7 @@ class Event {
     this.users,
     this.capacity,
     this.ratings,
-    this.isApproved,
-    this.isBlocked,
-    this.isEvent,
-    this.tags,
-    this.type,
+    this.isSaved,
     this.isJoined,
     this.status,
     this.seatsBooked,
@@ -98,14 +90,7 @@ class Event {
         ratings: json["ratings"] != null
             ? List<dynamic>.from(json["ratings"].map((x) => x))
             : [],
-        isApproved: json["isApproved"] ?? false,
-        isBlocked: json["isBlocked"] ?? false,
-        isEvent: json["isEvent"] ?? false,
-        capacity: json["capacity"] ?? "",
-        tags: json["tags"] != null
-            ? List<dynamic>.from(json["tags"].map((x) => x))
-            : [],
-        type: json["type"] ?? "",
+        isSaved: json["isSaved"] ?? false,
         isJoined: json["isJoined"] ?? false,
         status: json["status"] ?? "",
         seatsBooked: json["seatsBooked"] ?? 0,
@@ -130,12 +115,8 @@ class Event {
         "images": image ?? "",
         "users": users ?? [],
         "ratings": ratings ?? [],
-        "isApproved": isApproved,
-        "isBlocked": isBlocked,
-        "isEvent": isEvent,
+        "isSaved": isSaved,
         "capacity": capacity,
-        "tags": tags ?? [],
-        "type": type,
         "isJoined": isJoined,
         "status": status,
         "seatsBooked": seatsBooked,
