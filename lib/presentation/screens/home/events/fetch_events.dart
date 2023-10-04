@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../constants/app_colors.dart';
 import '../../../../data/models/user.dart';
 import '../../../../data/repositories/auth_repository.dart';
+import '../../../../data/repositories/events_repository.dart';
 import '../../../../logic/cubits/cubit/event_cubit.dart';
 import 'event_details.dart';
 
@@ -42,7 +43,7 @@ class _EventsState extends State<Events> {
           ),
           backgroundColor: AppColors().primary,
           title: Text(
-            'Welcome ${user?.name ?? 'name'}',
+            'Welcome ${user?.username ?? 'name'}',
             style: const TextStyle(
                 color: Colors.white, fontSize: 25, fontWeight: FontWeight.w400),
           ),
@@ -143,13 +144,13 @@ class _EventsState extends State<Events> {
                                           const SizedBox(height: 5),
                                           IconButton(
                                             onPressed: () async {
-                                              await BlocProvider.of<EventCubit>(
-                                                      context)
+                                              await EventRepository()
                                                   .bookmarkEvent(
-                                                      id: state
+                                                      eventId: state
                                                           .allEvents
                                                           .popularEvents![index]
                                                           .id!);
+                                              setState(() {});
                                             },
                                             icon: state
                                                         .allEvents
